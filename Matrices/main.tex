@@ -1,0 +1,186 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{tikz,pgfplots}
+\usepackage{pgfgantt}
+
+%%%%PARA MATRIZ DE CONFUSIÓN
+\newcommand\mc[1]{\multicolumn{1}{@{~}c@{~}|}{#1}}
+\newcommand\mcn[1]{\multicolumn{1}{@{~}c@{~}}{#1}}
+
+%%%PARA MANIPULAR LAS TABLAS
+\usepackage{tabulary}
+\usepackage{booktabs}
+\usepackage{xcolor,colortbl}
+\definecolor{lavender}{rgb}{0.9, 0.9, 0.98}
+\definecolor{Antique white}{rgb}{0.98, 0.92, 0.84}
+
+\usetikzlibrary{positioning,fit,calc}
+
+\title{Matrices de Confusión y otros}
+\author{Dr. Félix Fernando González Navarro}
+
+\pgfplotsset{compat=1.18}
+\begin{document}
+\maketitle
+
+
+\section{Matriz de Confusión}
+\begin{table}[!h]
+\centering
+\begin{tabular}{rrccccc}
+    &                        &  \multicolumn{5}{c}{Predicted}\\
+    &             \mcn{}              & \mcn{1}  &\mcn{2}  &\mcn{3}  & \mcn{4}  & \mcn{5}\\
+    \cline{3-7}              & \mc{1} & \mc{349} &\mc{6.3} &\mc{0.1} & \mc{0.5} & \mc{0}\\
+    \cline{3-7}              & \mc{2} & \mc{6}   &\mc{334} &\mc{4.3} & \mc{1}   & \mc{0.1}\\
+    \cline{3-7}\mcn{Observed}& \mc{3} & \mc{1.7} &\mc{7.1} &\mc{315.4}& \mc{2.4}& \mc{0.3}\\
+    \cline{3-7}              & \mc{4} & \mc{0.8} &\mc{1.1} &\mc{2.6}  & \mc{288.5}&\mc{1.3}\\
+    \cline{3-7}              & \mc{5} & \mc{0.6} &\mc{0.7} & \mc{0.8} & \mc{1.9}& \mc{315.1}\\
+    \cline{3-7}
+\end{tabular}
+\label{Tab::KNN_Training}
+\caption{K-NN Metrics}
+\end{table} 
+
+
+\section{Matriz de Confusión}
+
+\begin{table}[!h]
+\centering
+\begin{tabular}{rrccccc}
+    &   &  \multicolumn{5}{c}{Predicted}\\
+    &                   \mcn{}     & \mcn{1}  & \mcn{2}  & \mcn{3}   & \mcn{4}   & \mcn{5}\\
+    \cline{3-7}           & \mcn{1} & \mcn{\cellcolor{Antique white}349} & \mcn{6.3} & \mcn{0.1}  & \mcn{0.5}  & \mcn{0}\\
+    \cline{3-7}           & \mcn{2} & \mcn{6}   & \mcn{\cellcolor{Antique white}334} & \mcn{4.3}  & \mcn{1}    & \mcn{0.1}\\
+    \cline{3-7}\mcn{Observed} & \mcn{3} & \mcn{1.7} & \mcn{7.1} & \mcn{\cellcolor{Antique white}315.4}& \mcn{2.4}  & \mcn{0.3}\\
+    \cline{3-7}           & \mcn{4} & \mcn{0.8} & \mcn{1.1} & \mcn{2.6}  & \mcn{\cellcolor{Antique white}288.5}& \mcn{1.3}\\
+    \cline{3-7}           & \mcn{5} & \mcn{0.6} & \mcn{0.7} & \mcn{0.8}  & \mcn{1.9}  & \mcn{\cellcolor{Antique white}315.1}\\
+    \cline{3-7}
+\end{tabular}
+\label{Tab::KNN_Training}
+\caption{K-NN Metrics}
+\end{table} 
+
+
+\newpage
+
+
+\section{Gráfica}
+\begin{figure}[!h]
+\centering    
+\begin{tikzpicture}
+ \begin{axis}[scatter,only marks,scatter src=explicit symbolic,
+            scatter/classes={
+                    a={mark=square*,Antique white},
+                    b={mark=triangle*,red},
+                    c={mark=o,draw=black,fill=black}
+                },
+                legend pos=south east]
+    \addplot table[x=x,y=y,meta=label,col sep=comma]{Table_data.csv};
+    \legend{Class 1,Class 2,Class 3}]
+\end{axis}
+\end{tikzpicture}
+\caption{Scatter}
+\end{figure}
+
+
+\begin{figure}[!h]
+\centering    
+\begin{tikzpicture}
+    \begin{axis}[ybar,legend pos=north east,nodes near coords]
+        \addplot table[x=i,y=x,col sep=comma]{Table_data.csv};
+        \addplot table[x=i,y=y,col sep=comma]{Table_data.csv};
+        \legend{Class x,Clase y}
+    \end{axis}
+\end{tikzpicture}
+\caption{Barra}
+\end{figure}
+
+
+
+\newpage
+
+\section{Diagrama}
+
+\tikzset{block/.style={draw, thick, text width=2cm, minimum height=1cm, align=center}, line/.style={-latex}}  
+
+\begin{figure}[!h]
+\centering    
+\begin{tikzpicture}
+  \node[block] (a) {Source};  
+  \node[block,right=of a] (b) {Transmitter};
+  \node[block,right=of b] (c) {Channel};  
+  \node[block,right=of c] (d) {Reciever};  
+  \draw[line] (a)-- (b);  
+  \draw[line] (b)-- (c); 
+  \draw[line] (c)-- (d); 
+\end{tikzpicture}
+\caption{Diagrama}
+\end{figure}
+
+\newpage
+\section{Tablas. Tabulary}
+\begin{center}
+\settowidth\tymin{\textbf{Unitary Price}}
+\begin{tabulary}{\textwidth}{||>{\columncolor{lavender}}L|J|C|>{\columncolor{lavender}}C|R||}
+         \toprule
+         \emph{Name}&
+         \emph{Description}&
+         \emph{Unitary Price}&
+         \emph{Qty.}& 
+         \emph{Total}\\
+            \midrule
+            Cyclone V SoC 5CSXFC 6D6F31C6 &Field-Programmable Gate Arrays-System On Chip (SoC) device. Designed specifically for Artificial Intelligence, Internet of Things apps and Medical equipment& 240 USD & 2 &480 USD\\
+            \rowcolor{lavender}
+            \hline
+            ESP32-U4WDH &Single-core 32-bit LX6 microprocessor, compliant with Antique whitetooth v4.2 BR/EDR and BLE specifications. Incorporates the standard Wi-Fi: 802.11 b/g/n with 4 MB embedded flash (80 MHz)& 2.63 USD & 10 &26.3 USD\\
+            \hline
+            RSA5065N Real-Time Spectrum Analyzer&Real time spectrum analyzer with vector network analysis @Frequency range: 9kHz to 6.5 GHz and VNA frequency range: 100kHz to 6.5 GHz&12,600 USD&1& 12,600 USD\\
+        \bottomrule
+\end{tabulary}
+\end{center}
+
+\newpage
+\section{Diagrama de Actividades}
+\definecolor{barblue}{RGB}{153,204,254}
+\begin{ganttchart}[
+    hgrid,
+    vgrid,
+    y unit chart = 1.5cm,
+    newline shortcut=false,
+    bar label node/.append style= {align=right},
+    time slot format=isodate-yearmonth, 
+    time slot unit=month,
+    bar height = 0.3 
+    ]{2024-08}{2026-06}
+\gantttitlecalendar{year, month}  \ganttnewline
+\ganttbar[bar/.append style={fill=barblue}]{Revisión de \\literatura}{2024-08}{2024-10}  \ganttnewline
+\ganttbar[bar/.append style={fill=barblue}]{Preparación de \\dispositivos ESP32}{2024-09}{2024-10} \ganttnewline
+\ganttbar[bar/.append style={fill=barblue}]{Construcción  \\del sistema}{2024-10}{2024-12} \ganttnewline 
+\ganttbar[bar/.append style={fill=barblue}]{Pruebas del\\ sistema}{2024-12}{2025-02}\ganttnewline
+\ganttbar[bar/.append style={fill=barblue}]{Creación de \\conjunto de datos}{2025-03}{2025-04} \ganttnewline
+\ganttbar[bar/.append style={fill=barblue}]{Entrenamiento \\de modelos}{2025-07}{2025-08} 
+\ganttnewline
+\ganttbar[bar/.append style={fill=barblue}]{Escritura de\\Tesis}{2024-08}{2026-06}
+\end{ganttchart}
+
+
+\newcommand\mcr[1]{\multicolumn{1}{c|}{#1}}
+\newcommand\mcl[1]{\multicolumn{1}{|c|}{#1}}
+\begin{table}[!h]
+\centering
+\begin{tabular}{ccccc}
+    Gender  &Weigth(lb)  &Height  & Age  & Physical Disability\\
+    \hline
+    \mcl{Female} & \mcr{154} &\mcr{5'28''} &\mcr{26} &\mcr{No} \\
+    \mcl{Female} & \mcr{121}   &\mcr{5'49''} &\mcr{40} & \mcr{No} \\
+    \mcl{Male}   & \mcr{198} &\mcr{5'60''} &\mcr{31}&\mcr{No}\\
+    \mcl{Male}   & \mcr{165} &\mcr{5'80''} &\mcr{38}  & \mcr{No}\\
+    \hline
+\end{tabular}
+\label{Tab::Participants}
+\caption{Participants}
+\end{table} 
+
+
+
+\end{document}
